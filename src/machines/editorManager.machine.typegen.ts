@@ -13,8 +13,9 @@ export interface Typegen0 {
     delays: never;
   };
   eventsCausingActions: {
+    activateEditor: "ACTIVATE" | "FOCUS_EDITOR" | "SPAWN_EDITOR";
+    deactivateEditor: "SPAWN_EDITOR";
     destroyEditor: "DESTROY_EDITOR";
-    focusEditor: "ACTIVATE" | "FOCUS_EDITOR" | "SPAWN_EDITOR";
     spawnEditor: "ACTIVATE" | "SPAWN_EDITOR";
   };
   eventsCausingServices: {};
