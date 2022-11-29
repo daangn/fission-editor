@@ -7,7 +7,7 @@ export interface Typegen0 {
   };
   invokeSrcNameMap: {};
   missingImplementations: {
-    actions: never;
+    actions: "mergeSectionBody";
     services: never;
     guards: never;
     delays: never;
@@ -16,13 +16,13 @@ export interface Typegen0 {
     changeBody: "CHANGE_BODY";
     changeHeading: "CHANGE_HEADING";
     destroySelf: "DEACTIVATE" | "INPUT_BACKSPACE";
-    spawnSibling: "SPAWN_SIBLING";
+    mergeSectionBody: "INPUT_BACKSPACE";
   };
   eventsCausingServices: {};
   eventsCausingGuards: {
     editorBodyHasNoContent: "INPUT_BACKSPACE";
     editorHasNoContent: "DEACTIVATE" | "INPUT_BACKSPACE";
-    editorHeadingHasNoContent: "DEACTIVATE";
+    editorHeadingHasNoContent: "DEACTIVATE" | "INPUT_BACKSPACE";
   };
   eventsCausingDelays: {};
   matchesStates:
