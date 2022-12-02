@@ -14,8 +14,9 @@ export interface Typegen0 {
   };
   eventsCausingActions: {
     activateEditor: "ACTIVATE" | "FOCUS_EDITOR" | "SPAWN_EDITOR";
-    deactivateEditor: "SPAWN_EDITOR";
+    deactivateEditor: "REORDER_EDITOR" | "SPAWN_EDITOR";
     destroyEditor: "DESTROY_EDITOR";
+    reorderEditor: "REORDER_EDITOR";
     spawnEditor: "ACTIVATE" | "SPAWN_EDITOR";
   };
   eventsCausingServices: {};
@@ -23,6 +24,6 @@ export interface Typegen0 {
     hasNoChildren: "ACTIVATE";
   };
   eventsCausingDelays: {};
-  matchesStates: "focus" | "idle";
+  matchesStates: "dragging" | "focus" | "idle";
   tags: never;
 }

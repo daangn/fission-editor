@@ -21,6 +21,8 @@
     "@xstate/inspect": "^0.7.0",
     "@xstate/react": "^3.0.1",
     "immer": "^9.0.16",
+    "react-dnd": "^16.0.1",
+    "react-dnd-html5-backend": "^16.0.1",
     "remirror": "^2.0.17",
     "xstate": "^4.34.0"
   },

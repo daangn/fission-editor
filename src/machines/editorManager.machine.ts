@@ -13,7 +13,7 @@ export type EditorManagerEventSender = Sender<
 >;
 
 export const editorManagerMachine =
-  /** @xstate-layout N4IgpgJg5mDOIC5SQJYBcD2AnAsgQwDs8YsA6FCAGzAGIBBAYQBUBJANTqYFEBtABgC6iUAAcMsdCgwFhIAB6IAjABZFpZQHYAnIoBsADn1aAzPuPGArABoQATyXHlpHSotaATOb673F9wF9-G1RMXEJiMDIKanpmdk5eRSEkEDEJNCkZFIUEFTVNHQMjU3NrO0R3H3ULM3cNP0qfDUDgiHRsfCISUgAzDABjAFdYGgARLkZWDm5+ZNFxSWlZHMUtLVJdXQ99d2ULRQ19ZR8bewQd511LZXdFC1U+Pl8W8DbQzoiyPqGR8YBlJgAJQA8gBNAD6XFGLCYwMBs1kaUWWVAORq6wsukU+kUxk8imxJ3KCDq+lIGk0Ki0Bm8h0ULxCHXC3W+wxofwACnQAOoAOUh0Nh8MEiIWGSW2UQyjxpGMfDcHkxfn2ulOSk0spxWlpFg07n0GmaQVe7TCXUivQGbIAYsCGABVP4CmFwhEpJHilHyRA1JyVCxufaKXbuOpqhDKEzOXwWa6HXXGI3GggYCBwWSMs2fUXpTLLRAAWlVxKLpD4xl0e0rVw0m31FgZbyZ5qiVDAOeR+Yj7nD+uMpDcibxqkNwYCxszHxZVvg7rFeclEY0fFlxi0O1UKhuu3DifWejM9UeWz4+j4ykCgSAA */
+  /** @xstate-layout N4IgpgJg5mDOIC5SQJYBcD2AnAsgQwDs8YsA6FCAGzAGIBBAYQBUBJANTqYFEBtABgC6iUAAcMsdCgwFhIAB6IAjABZFAGhABPRMoDsfUnwAcATj4A2AEwBWAL62NqTLkLEwZCtXrN2nXoqEkEDEJNCkZIIUEFXUtRGsTS1JlE2tLI0UTI0tlS0Uje0cIdGx8IhJyKloAEQAlOgBxAH0uapYmAHla-kDRcUlpWSiYjW0EI2VC8GLnMrcyADMMAGMAV1gaWq4u6q5alrbO7sFZEIGI0CjcgGZSa31rxRtRnQnSXXNrBOVlbNzMqZOUquCpLNYbXaMVgcbg9U79MKDSKISzmRTJayPZ5xBCqEx3UwWGyAmbA8ruUhg9Y0XYAZSYtQ6AE0Du0unCgmdERd5DpLLc+CZrrprC8ENcjEZSBliQ5piUXOTFitqbSAAp0ADqADlWUcOX1QuEhjpHqRMpinqKcfz8aksXY5UDFfNKSqNgAxDoMACqtL17JOnIRxuRuOuSVUyiJ1rGKkmUwIGAgcFkzrmJHhRqRl0QAFpzGKCySFRmKZ4wFnzibcZYxSl8Sk8rpLDknopBQmiqWQRSqfBg9meVddOj0mYrLHEGikopRxMfn88iYS7Ne2QIFhiFAUAQoFXuTW9GPCZOxUZbo77EA */
   createMachine(
     {
       tsTypes: {} as import("./editorManager.machine.typegen").Typegen0,
@@ -39,6 +39,14 @@ export const editorManagerMachine =
           | {
               type: "FOCUS_EDITOR";
               id: string;
+            }
+          | {
+              type: "DRAG_EDITOR";
+            }
+          | {
+              type: "REORDER_EDITOR";
+              prevIndex: number;
+              nextIndex: number;
             },
       },
       preserveActionOrder: true,
@@ -59,10 +67,16 @@ export const editorManagerMachine =
                 actions: "activateEditor",
               },
             ],
+            DRAG_EDITOR: {
+              target: "dragging",
+            },
           },
         },
         focus: {
           on: {
+            REORDER_EDITOR: {
+              actions: ["reorderEditor", "deactivateEditor"],
+            },
             DEACTIVATE: {
               target: "idle",
             },
@@ -77,6 +91,7 @@ export const editorManagerMachine =
             },
           },
         },
+        dragging: {},
       },
     },
     {
@@ -120,6 +135,15 @@ export const editorManagerMachine =
           }
         }),
         deactivateEditor: assign((context, event) => {
+          context.currentEditorId = null;
+        }),
+        reorderEditor: assign((context, event) => {
+          const editor = context.editors[event.prevIndex];
+          const reorderedEditors = [...context.editors];
+          reorderedEditors.splice(event.prevIndex, 1);
+          reorderedEditors.splice(event.nextIndex, 0, editor);
+
+          context.editors = reorderedEditors;
           context.currentEditorId = null;
         }),
       },
