@@ -1,6 +1,14 @@
 /* @eslint-disable */
 
-import { spawn, createMachine, type Sender, type EventFrom } from "xstate";
+import {
+  spawn,
+  createMachine,
+  type Sender,
+  type EventFrom,
+  StateFrom,
+  ContextFrom,
+  ActorRefFrom,
+} from "xstate";
 import { assign } from "@xstate/immer";
 
 import {
@@ -11,6 +19,11 @@ import {
 export type EditorManagerEventSender = Sender<
   EventFrom<typeof editorManagerMachine>
 >;
+export type EditorManagerActorRef = ActorRefFrom<typeof editorManagerMachine>;
+
+export type EditorManagerState = StateFrom<typeof editorManagerMachine>;
+
+export type EditorManagerContext = ContextFrom<typeof editorManagerMachine>;
 
 export const editorManagerMachine =
   /** @xstate-layout N4IgpgJg5mDOIC5SQJYBcD2AnAsgQwDs8YsA6FCAGzAGIBBAYQBUBJANTqYFEBtABgC6iUAAcMsdCgwFhIAB6IAjABZFpZQHYAnIoBsADn1aAzPuPGArABoQATyXHlpHSotaATOb673F9wF9-G1RMXEJiMDIKanpmdk5eRSEkEDEJNCkZFIUEFTVNHQMjU3NrO0R3H3ULM3cNP0qfDUDgiHRsfCISUgAzDABjAFdYGgARLkZWDm5+ZNFxSWlZHMUtLVJdXQ99d2ULRQ19ZR8bewQd511LZXdFC1U+Pl8W8DbQzoiyPqGR8YBlJgAJQA8gBNAD6XFGLCYwMBs1kaUWWVAORq6wsukU+kUxk8imxJ3KCDq+lIGk0Ki0Bm8h0ULxCHXC3W+wxofwACnQAOoAOUh0Nh8MEiIWGSW2UQyjxpGMfDcHkxfn2ulOSk0spxWlpFg07n0GmaQVe7TCXUivQGbIAYsCGABVP4CmFwhEpJHilHyRA1JyVCxufaKXbuOpqhDKEzOXwWa6HXXGI3GggYCBwWSMs2fUXpTLLRAAWlVxKLpD4xl0e0rVw0m31FgZbyZ5qiVDAOeR+Yj7nD+uMpDcibxqkNwYCxszHxZVvg7rFeclEY0fFlxi0O1UKhuu3DifWejM9UeWz4+j4ykCgSAA */
