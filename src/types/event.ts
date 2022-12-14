@@ -1,9 +1,11 @@
-export interface EditorEventOutput {
-  editorId: string;
-}
+import { type EditorManagerContext } from "../core/machines/editorManager.machine";
 
-export interface EventHandler<T> {
-  onChange?: (e: React.ChangeEvent) => void;
-  onFocus?: (e: React.FocusEvent) => T;
-  onBlur?: (e: React.MouseEvent) => T;
-}
+export type EditorEventOutput = {
+  editorId: string;
+};
+
+export type EventHandler = {
+  onChange?: (editors: EditorManagerContext["editors"]) => void;
+  onFocus?: (editorId: string) => void;
+  onBlur?: (editorId: string) => void;
+};

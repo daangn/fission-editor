@@ -4,8 +4,8 @@ import {
   assign,
   sendParent,
   type ActorRefFrom,
-  ContextFrom,
-  StateValueFrom,
+  type ContextFrom,
+  type StateValueFrom,
 } from "xstate";
 import { assign as immerAssign } from "@xstate/immer";
 

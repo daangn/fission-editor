@@ -1,25 +1,30 @@
+import * as React from "react";
+import { useActor } from "@xstate/react";
 import { Remirror, useRemirror } from "@remirror/react";
 import { htmlToProsemirrorNode } from "remirror";
 
 import { HeadingExtension } from "../core/remirror/headingExtension";
 import { type SectionEditorActorRef } from "../core/machines/sectionEditor.machine";
 import EditorInteractions from "./EditorInteractions";
-import { type EditorManagerEventSender } from "../core/machines/editorManager.machine";
-import { type EditorEventOutput, type EventHandler } from "../types/event";
+import { type EventHandler } from "../types/event";
+import { EditorManager } from "../context/EditorManager";
 
-export interface SectionEditorProps<T> extends EventHandler<T> {
+export type SectionEditorProps = EventHandler & {
   id: string;
   sectionRef: SectionEditorActorRef;
-  sendParent: EditorManagerEventSender;
-}
+  className?: string;
+};
 
-const SectionEditor: React.FC<SectionEditorProps<EditorEventOutput>> = ({
+const SectionEditor: React.FC<SectionEditorProps> = ({
   id,
   sectionRef,
-  sendParent,
+  className,
 }) => {
+  const editorManagerRef = React.useContext(EditorManager);
+  const [_current, send] = useActor(editorManagerRef);
+
   const emitter = (_match: RegExpMatchArray) => {
-    sendParent("SPAWN_EDITOR");
+    send("SPAWN_EDITOR");
   };
   const { manager } = useRemirror({
     extensions: () => [new HeadingExtension(emitter)],
@@ -27,7 +32,7 @@ const SectionEditor: React.FC<SectionEditorProps<EditorEventOutput>> = ({
   });
 
   return (
-    <div data-part="section-editor">
+    <div data-part="section-editor" className={className}>
       <Remirror key={id} manager={manager} autoRender="end">
         <EditorInteractions sectionRef={sectionRef} />
       </Remirror>

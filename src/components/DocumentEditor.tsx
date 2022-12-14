@@ -2,16 +2,19 @@ import * as React from "react";
 import { useActor } from "@xstate/react";
 
 import { EditorManager } from "../context/EditorManager";
-import SectionEditor from "./SectionEditor";
-import { type EditorEventOutput, type EventHandler } from "../types/event";
+import { type EventHandler } from "../types/event";
 
-export interface DocumentEditorProps<T> extends EventHandler<T> {
+export type DocumentEditorProps = EventHandler & {
   className?: string;
-}
+  children: React.ReactNode;
+};
 
-const DocumentEditor: React.FC<DocumentEditorProps<EditorEventOutput>> = ({
+const DocumentEditor: React.FC<DocumentEditorProps> = ({
   className,
-  ...props
+  onFocus,
+  onBlur,
+  onChange,
+  children,
 }) => {
   const editorManagerRef = React.useContext(EditorManager);
   const [current, send] = useActor(editorManagerRef);
@@ -20,8 +23,14 @@ const DocumentEditor: React.FC<DocumentEditorProps<EditorEventOutput>> = ({
     const editorId = current.context.currentEditorId;
     if (editorId) {
       send({ type: "FOCUS_EDITOR", id: editorId });
+
+      onFocus && onFocus(editorId);
     }
   }, [current.context.currentEditorId]);
+
+  React.useEffect(() => {
+    onChange && onChange(current.context.editors);
+  }, [current.context.editors]);
 
   return (
     <div
@@ -40,17 +49,11 @@ const DocumentEditor: React.FC<DocumentEditorProps<EditorEventOutput>> = ({
       }}
       onBlur={() => {
         send("DEACTIVATE");
+
+        onBlur && onBlur(current.context.currentEditorId as string);
       }}
     >
-      {current.context.editors.map(([id, ref]) => (
-        <SectionEditor
-          key={id}
-          id={id}
-          sectionRef={ref}
-          sendParent={send}
-          {...props}
-        />
-      ))}
+      {children}
     </div>
   );
 };

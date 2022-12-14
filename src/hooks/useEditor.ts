@@ -9,7 +9,7 @@ export type Editor = {
   sectionEditorRef: SectionEditorActorRef;
 };
 
-export function useEditor(): Editor[] {
+export function useEditor() {
   const editorManagerRef = React.useContext(EditorManager);
   const [current, send] = useActor(editorManagerRef);
 

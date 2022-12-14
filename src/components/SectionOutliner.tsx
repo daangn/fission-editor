@@ -1,26 +1,19 @@
 import * as React from "react";
-import { useActor } from "@xstate/react";
 
-import { EditorManager } from "../context/EditorManager";
 import { type EventHandler } from "../types/event";
-import SectionOutlinerItem from "./SectionOutlinerItem";
 
-interface SectionOutlinerProps<T> extends EventHandler<T> {
+export type SectionOutlinerProps = EventHandler & {
   className?: string;
-}
+  children: React.ReactNode;
+};
 
-const SectionOutliner: React.FC<SectionOutlinerProps<{ id: string }>> = ({
+const SectionOutliner: React.FC<SectionOutlinerProps> = ({
   className,
-  ...props
+  children,
 }) => {
-  const editorManagerRef = React.useContext(EditorManager);
-  const [current, send] = useActor(editorManagerRef);
-
   return (
-    <div data-part="section-outliner">
-      {current.context.editors.map(([id, ref]) => (
-        <SectionOutlinerItem key={id} sectionRef={ref} {...props} />
-      ))}
+    <div data-part="section-outliner" className={className}>
+      {children}
     </div>
   );
 };

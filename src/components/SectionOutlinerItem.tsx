@@ -3,10 +3,10 @@ import { useActor } from "@xstate/react";
 import { type SectionEditorActorRef } from "../core/machines/sectionEditor.machine";
 import { type EventHandler } from "../types/event";
 
-interface SectionOutlinerProps<T> extends EventHandler<T> {
+export type SectionOutlinerProps = EventHandler & {
   sectionRef: SectionEditorActorRef;
-}
-const SectionOutlinerItem: React.FC<SectionOutlinerProps<{ id: string }>> = ({
+};
+const SectionOutlinerItem: React.FC<SectionOutlinerProps> = ({
   sectionRef,
 }) => {
   const [current] = useActor(sectionRef);

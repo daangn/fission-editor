@@ -1,22 +1,22 @@
+import * as React from "react";
 import { useActor } from "@xstate/react";
 
-import { type EditorManagerActorRef } from "../core/machines/editorManager.machine";
+import { EditorManager } from "../context/EditorManager";
 
-export function useSectionDispatch({ ref }: { ref: EditorManagerActorRef }) {
-  const [current, send] = useActor(ref);
+export function useEditorDispatch() {
+  const editorManagerRef = React.useContext(EditorManager);
+  const [_current, send] = useActor(editorManagerRef);
 
   return {
-    destroy: (id: string) => {
+    destroy: (id: string) =>
       send({
         type: "DESTROY_EDITOR",
         id,
-      });
-    },
-    create: (id: string) => {
+      }),
+    create: () =>
       send({
         type: "SPAWN_EDITOR",
-      });
-    },
+      }),
     focus: (id: string) => {
       send({
         type: "FOCUS_EDITOR",
