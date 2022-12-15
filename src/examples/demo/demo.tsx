@@ -13,15 +13,15 @@ export default function Demo() {
   const dispatch = useEditorDispatch();
 
   const onFocus = (editorId: string) => {
-    console.log("focus", editorId);
+    // console.log("focus", editorId);
   };
 
   const onBlur = (editorId: string) => {
-    console.log("blur", editorId);
+    // console.log("blur", editorId);
   };
 
   const onChange = (editors: EditorManagerContext["editors"]) => {
-    console.log("onChange", editors);
+    // console.log("onChange", editors);
   };
 
   return (

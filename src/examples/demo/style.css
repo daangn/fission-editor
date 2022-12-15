@@ -1,0 +1,7 @@
+[data-part="document-editor"] {
+  width: 100%;
+  min-height: 200px;
+  border: 1px solid;
+  display: flex;
+  flex-direction: column;
+}

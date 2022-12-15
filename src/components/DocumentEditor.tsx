@@ -37,13 +37,6 @@ const DocumentEditor: React.FC<DocumentEditorProps> = ({
       tabIndex={0}
       className={className}
       data-part="document-editor"
-      style={{
-        width: "100%",
-        minHeight: "200px",
-        border: "1px solid",
-        display: "flex",
-        flexDirection: "column",
-      }}
       onFocus={() => {
         send("ACTIVATE");
       }}

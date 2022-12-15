@@ -26,7 +26,7 @@ export type EditorManagerState = StateFrom<typeof editorManagerMachine>;
 export type EditorManagerContext = ContextFrom<typeof editorManagerMachine>;
 
 export const editorManagerMachine =
-  /** @xstate-layout N4IgpgJg5mDOIC5SQJYBcD2AnAsgQwDs8YsA6FCAGzAGIBBAYQBUBJANTqYFEBtABgC6iUAAcMsdCgwFhIAB6IAjABZFpZQHYAnIoBsADn1aAzPuPGArABoQATyXHlpHSotaATOb673F9wF9-G1RMXEJiMDIKanpmdk5eRSEkEDEJNCkZFIUEFTVNHQMjU3NrO0R3H3ULM3cNP0qfDUDgiHRsfCISUgAzDABjAFdYGgARLkZWDm5+ZNFxSWlZHMUtLVJdXQ99d2ULRQ19ZR8bewQd511LZXdFC1U+Pl8W8DbQzoiyPqGR8YBlJgAJQA8gBNAD6XFGLCYwMBs1kaUWWVAORq6wsukU+kUxk8imxJ3KCDq+lIGk0Ki0Bm8h0ULxCHXC3W+wxofwACnQAOoAOUh0Nh8MEiIWGSW2UQyjxpGMfDcHkxfn2ulOSk0spxWlpFg07n0GmaQVe7TCXUivQGbIAYsCGABVP4CmFwhEpJHilHyRA1JyVCxufaKXbuOpqhDKEzOXwWa6HXXGI3GggYCBwWSMs2fUXpTLLRAAWlVxKLpD4xl00q1ZkMOwCxszH260TAOeR+Yj7nD+uMpDcibxqkNwfrrVNTYtrPg7rFeclEY0fFlxi0O1UKhuu3DifWejM9UeWz4+j4ykCgSAA */
+  /** @xstate-layout N4IgpgJg5mDOIC5SQJYBcD2AnAsgQwDs8YsBiAEQFEBlAFQCUB5ATQH1LyBJWx+gbQAMAXUSgADhljoUGAqJAAPRACYALKoB0ANgAcAZgCsAdgMBOPXtMCtegDQgAnoi0BGUxr1blA1WuVGBHQEDAF8Q+1RMXEJiMDJqAAUAQQB1ADl2Lh5+YXkJKTQZOSRFFTUNA2VTHVMbF2UDHWN7JwQAWhc9CtUjHVcqly0BFyNVHTCIiHRsfCISUgAxRgBhAFVqTO5eQRES-OlZeSUEZscVAy7-IZrrKuUdXonwKajZ2KwNFAgAGzBSJOWtE4ADUkrRKDs8pIDsVQMc1C5tEZakZOupRv4WohPEYKgJlFotCYDC4asinpEZjESJ8fn8AUDQeC+C5duJoYVDiV4apEUSUWier4jFiEKorBorDV1N5Ub1QuFntNonM4hoAGYYADGAFdYBRKAyQWCIbk9hyikdsV4NJ17oEjFpfI1RXoRhoBPjCUY9D5KmowoqCBgIHB5JSVe8oQVLdzEKZRR18d1ej0DBcfZ1TBSXlTVR8vr9ozCrQgXKouiNakS9M6AgIRWcTsm9E0xp7UTogg2c8q3jTNbr4OaY1y4YhKjoNI6DF43AI3c7XYNp5UtI0zEEK9nA0A */
   createMachine(
     {
       tsTypes: {} as import("./editorManager.machine.typegen").Typegen0,
@@ -34,6 +34,8 @@ export const editorManagerMachine =
         context: {} as {
           editors: [string, SectionEditorActorRef][];
           currentEditorId: string | null;
+          // lastModifiedEditorId가 동기화 안되는중
+          lastModifiedEditorId: string | null;
         },
         events: {} as
           | {
@@ -56,6 +58,19 @@ export const editorManagerMachine =
       },
       preserveActionOrder: true,
       predictableActionArguments: true,
+      on: {
+        DESTROY_EDITOR: {
+          actions: "destroyEditor",
+        },
+        SPAWN_EDITOR: {
+          target: ".focus",
+          actions: ["deactivateEditor", "spawnEditor"],
+        },
+        FOCUS_EDITOR: {
+          target: ".focus",
+          actions: "activateEditor",
+        },
+      },
       id: "editorManager",
       initial: "idle",
       states: {
@@ -79,15 +94,6 @@ export const editorManagerMachine =
             DEACTIVATE: {
               target: "idle",
             },
-            DESTROY_EDITOR: {
-              actions: "destroyEditor",
-            },
-            SPAWN_EDITOR: {
-              actions: ["deactivateEditor", "spawnEditor", "activateEditor"],
-            },
-            FOCUS_EDITOR: {
-              actions: "activateEditor",
-            },
           },
         },
       },
@@ -96,7 +102,10 @@ export const editorManagerMachine =
       actions: {
         spawnEditor: assign((context) => {
           const id = Math.random().toString();
-          context.editors.push([
+          const index = context.editors.findIndex(
+            ([id, ref]) => id === context.currentEditorId
+          );
+          context.editors.splice(index + 1, 0, [
             id,
             spawn(
               sectionEditorMachine.withContext({
@@ -107,6 +116,7 @@ export const editorManagerMachine =
               })
             ),
           ]);
+          context.currentEditorId = id;
         }),
         destroyEditor: assign((context, event) => {
           const [_id, ref] =
@@ -114,13 +124,17 @@ export const editorManagerMachine =
           ref?.stop?.();
 
           context.editors = context.editors.filter(([id]) => id !== event.id);
+          // TODO: destroy하고 currentEditorId 수정
           context.currentEditorId = context.editors.at(-1)?.[0] ?? null;
         }),
         activateEditor: assign((context, event) => {
           switch (event.type) {
-            case "ACTIVATE":
-            case "SPAWN_EDITOR": {
-              context.currentEditorId = context.editors.at(-1)?.[0] ?? null;
+            case "ACTIVATE": {
+              const index = context.editors.findIndex(
+                ([id]) => id === context.currentEditorId
+              );
+
+              context.currentEditorId = context.editors.at(index)?.[0] ?? null;
               break;
             }
             case "FOCUS_EDITOR": {
@@ -133,6 +147,10 @@ export const editorManagerMachine =
           }
         }),
         deactivateEditor: assign((context, event) => {
+          if (event.type === "SPAWN_EDITOR") {
+            return;
+          }
+
           context.currentEditorId = null;
         }),
       },

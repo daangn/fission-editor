@@ -18,7 +18,7 @@ export type SectionEditorStateValue = StateValueFrom<
 >;
 
 export const sectionEditorMachine =
-  /** @xstate-layout N4IgpgJg5mDOIC5SzAYwC4EsD2A7AohJutgE4B0AZtqgK6wDEAIvgIIDCAKgJIBqrnfAG0ADAF1EoAA7ZYxHLkkgAHogCMAVjVryAZg0BOXWoBMADgAsagxYtmANCACeiXSIvkLB7xYBsIkSNfAHZggF8wxxQMBUJiMioaemY2Lj4BYTUJJBAZOSw8JVUETW09Q2NzKxs7RxcEEw1dcm9vDUsvIzVdCwiotAKCIhIKajpGADEAeXYAVQBlAH0ACTYmbgA5AHFRbOlZeUKc4oNgusRgjRFygxNdEI0NExDfPpBowbiRxPGGabmlgAhKZMACauyUeUOimOiFO5wQvhMJhaFkaZhMFn0dmCJjeH1iwwSY3o5DwyzAAEMiLgoAxNgAFWacRaAjgAaXmDI4wnEkIOgyK6ncOjsWN8ugMamCvj8CNlZnIvg0vjUFnauLMNnCkXeA0J8VGSVgZNwFOpmFp9I2TJZbPYnO57Eye1yAoUQpKAR0ajMwQsoTUEtlIl0CMeKJMofc5jc3nc+P1eC+xONpvNNLpjOZrI5XJ5QhMrqhgthXuCOn9-hlz3ckvDIkr0YjFcevV1BOTRKN43TVMzDHYy1Y23wKzWmx2fJyJY9Ze0JgMSul3UeWkeDmciAsIg05ExbWRi9lBg0iZiXcNP1JeEB2AgTmtttzDvzzohM-dR1AxUMvlRTRBjWIiWGo8qLkqgSYoulwaF4Z4dkmQxXiSJq3vej7ZnaeZOi6-L5HOP6IOYKJaiIEqBGYaqYmcW4ICqwTkNYtbBKGG6NOenzdteaG4HeD6DsOo6siC4LTvsBHfiorhNOQZhmCEvoGP4VzkQiAbXMEko7v6jahLolycQa3yYBAAA2YAMBwPD8IIIlgh+EnQp6SIIgYjZMVBbhNF4ClGZeJnmZZ1npIIjlupJMJEfRJhuVokG3L6gS2Ee-nISZuAAG6UmZplWWktm8sWX5RdJMUIhiLStMEtwHsqIRpSmPbJCwIWFYWxWRZ6mgefoXRVNYtibvUO7XKexjqrKxgyu2uq4PecBKJ26VkPhznzgiAC0-4BAEdiLoYTzaAYjXcaha2ltFXgIsY-4HqcbjuL4Zi6GYCH9BeK3NbxGaWlAF2EWV2hIjcBlIlK0q+AilzXGoUF2FKAbeLop0oWm6EPgDUnFK9e6YqqenRriGjgSivi3IY6qno28mo4FFlY6VxS+mi5RBgG0qnLFdF+EunOscYoYGZYdMJJa2W5RAjPdbVAFouRfpad0bk6CBuhuAejSXH4EQREAA */
+  /** @xstate-layout N4IgpgJg5mDOIC5SzAYwC4EsD2A7AohJutgE4B0AZtqgK6wDEAIvgIIDCAKgJIBqrnfAG0ADAF1EoAA7ZYxHLkkgAHogCMAFgCcANnIBmAKxaNOw5q2WdAGhABPREZHkNh-Wp0AmDSK0j9WkYAvkG2KBgKhMRkVDT0zGxcfALCahJIIDJyWHhKqgiaABx6RiZmFla2DgjaAOwuIl6FGp6BxTq1hiFhaDkERCQU1HSMLBw8-IJCnunSsvK5GfkWJcam5tqV9ogapuR+TeZmOiKFat0g4X1Rg7EjDABiAPLsAKoAygD6ABJsTNwAOQA4qJZpl5n08ogtLUqohakYDGpPIYRGpfCitB4LldIgMYsN4s83l8AEJPJgATVBSiyC0US2hsO2CB0mnIhi8hk8vkMhU8zUKON6eOiQzisHIeG+YAAhkRcFAGICAAqvTifUkcADS7xVHGE4lpEIUUIKIg0ahczX0hXc3nRhWZ1WOHMKa0KlkKntqGmFETwNwJEqluBl8swiuVALVGq17F1+vYqTBdMhjPNaPIaidhm5xR8+n0zsQnOcan0As8XhaleK-uu+PFI1D4YVStV6s1Or1BumqZNi1AyxEtStvpOWmKnk8ObhCFRWnIOjrnjHmkalgbotuhMl0rl7YY7G+rGB+B+f0BIKNGTTpozamRS7ZtQFT7UtS0hnnlv02a-N9iydSt9A6bdAybO56FDUlsAgOxo1jbsE17ZMaTvQcGWHUtdH2VxK1MV9OQ0ecV3qNw-H5Wo3w0AItAg-oxWg-dcDghCkK7eNEz7NJjWyB8cIQKtyE9RoeQ0McRBnQxSJZPlxzEhFGn0UczkYoNmxgvB2MQk8zyBC9ySpDC5gEocVEcNxROKWpGkLHQdGKX93QMUpUVUsxfH0DSoMwCAABswAYcZkkETUKWpW8zPpM0vHnT8lwI5FCjRC1i3OUJLhFSDmP8oKQqSSZDQHczsMshdPHnO1yBEOq6u5NxijtLostxXLbkjAA3WUAv8wqJhSUzwTKs1uXnPwl38SadEkzy8xCLLcHguAlHapjBn42LH3nABaQx9ksKdv2MWadC0NdfOYvctvTITtHnQiAJhKsNDtRydCu3cQwPCNFVuwSKqfLwDA9WTBUMBF506QpaoCUdPzzIjMp6AMNuDFsdPg6oYruirbQO7xJ2kqdkV2Mji3IAU-DfNQsSLJyvpifKwABizljteojA8Pl-FHNk5OqWdy0AowOhOW0aKZihut6-y2fKjmYXw2SEWO7QUXnVFPH2T02Qk87AkykIgA */
   createMachine(
     {
       tsTypes: {} as import("./sectionEditor.machine.typegen").Typegen0,
@@ -118,9 +118,11 @@ export const sectionEditorMachine =
             ],
             FOCUS_HEADING: {
               target: ".onHeading",
+              actions: "focusEditor",
             },
             FOCUS_BODY: {
               target: ".onBody",
+              actions: "focusEditor",
             },
           },
         },
@@ -128,9 +130,11 @@ export const sectionEditorMachine =
           on: {
             ACTIVATE_BODY: {
               target: "#sectionEditor.focus.onBody",
+              actions: "focusEditor",
             },
             ACTIVATE: {
               target: "focus",
+              actions: "focusEditor",
             },
           },
         },
@@ -138,6 +142,7 @@ export const sectionEditorMachine =
           on: {
             ACTIVATE: {
               target: "focus",
+              actions: "focusEditor",
             },
           },
         },
@@ -153,6 +158,10 @@ export const sectionEditorMachine =
         }),
         destroySelf: sendParent((context) => ({
           type: "DESTROY_EDITOR",
+          id: context.id,
+        })),
+        focusEditor: sendParent((context) => ({
+          type: "FOCUS_EDITOR",
           id: context.id,
         })),
       },

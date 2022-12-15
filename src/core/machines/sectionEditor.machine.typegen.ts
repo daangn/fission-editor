@@ -16,6 +16,7 @@ export interface Typegen0 {
     changeBody: "CHANGE_BODY";
     changeHeading: "CHANGE_HEADING";
     destroySelf: "DEACTIVATE" | "INPUT_BACKSPACE";
+    focusEditor: "ACTIVATE" | "ACTIVATE_BODY" | "FOCUS_BODY" | "FOCUS_HEADING";
     mergeSectionBody: "INPUT_BACKSPACE";
   };
   eventsCausingServices: {};
