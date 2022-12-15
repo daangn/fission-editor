@@ -18,7 +18,7 @@ export type SectionEditorStateValue = StateValueFrom<
 >;
 
 export const sectionEditorMachine =
-  /** @xstate-layout N4IgpgJg5mDOIC5SzAYwC4EsD2A7AohJutgE4B0AZtqgK6wDEAIvgIIDCAKgJIBqrnfAG0ADAF1EoAA7ZYxHLkkgAHogCMAFgCcANnIBmAKxaNOw5q2WdAGhABPREZHkNh-Wp0AmDSK0j9WkYAvkG2KBgKhMRkVDT0zGxcfALCahJIIDJyWHhKqgiaABx6RiZmFla2DgjaAOwuIl6FGp6BxTq1hiFhaDkERCQU1HSMLBw8-IJCnunSsvK5GfkWJcam5tqV9ogapuR+TeZmOiKFat0g4X1Rg7EjDABiAPLsAKoAygD6ABJsTNwAOQA4qJZpl5n08ogtLUqohakYDGpPIYRGpfCitB4LldIgMYsN4s83l8AEJPJgATVBSiyC0US2hsO2CB0mnIhi8hk8vkMhU8zUKON6eOiQzisHIeG+YAAhkRcFAGICAAqvTifUkcADS7xVHGE4lpEIUUIKIg0ahczX0hXc3nRhWZ1WOHMKa0KlkKntqGmFETwNwJEqluBl8swiuVALVGq17F1+vYqTBdMhjPNaPIaidhm5xR8+n0zsQnOcan0As8XhaleK-uu+PFI1D4YVStV6s1Or1BumqZNi1AyxEtStvpOWmKnk8ObhCFRWnIOjrnjHmkalgbotuhMl0rl7YY7G+rGB+B+f0BIKNGTTpozamRS7ZtQFT7UtS0hnnlv02a-N9iydSt9A6bdAybO56FDUlsAgOxo1jbsE17ZMaTvQcGWHUtdH2VxK1MV9OQ0ecV3qNw-H5Wo3w0AItAg-oxWg-dcDghCkK7eNEz7NJjWyB8cIQKtyE9RoeQ0McRBnQxSJZPlxzEhFGn0UczkYoNmxgvB2MQk8zyBC9ySpDC5gEocVEcNxROKWpGkLHQdGKX93QMUpUVUsxfH0DSoMwCAABswAYcZkkETUKWpW8zPpM0vHnT8lwI5FCjRC1i3OUJLhFSDmP8oKQqSSZDQHczsMshdPHnO1yBEOq6u5NxijtLostxXLbkjAA3WUAv8wqJhSUzwTKs1uXnPwl38SadEkzy8xCLLcHguAlHapjBn42LH3nABaQx9ksKdv2MWadC0NdfOYvctvTITtHnQiAJhKsNDtRydCu3cQwPCNFVuwSKqfLwDA9WTBUMBF506QpaoCUdPzzIjMp6AMNuDFsdPg6oYruirbQO7xJ2kqdkV2Mji3IAU-DfNQsSLJyvpifKwABizljteojA8Pl-FHNk5OqWdy0AowOhOW0aKZihut6-y2fKjmYXw2SEWO7QUXnVFPH2T02Qk87AkykIgA */
+  /** @xstate-layout N4IgpgJg5mDOIC5SzAYwC4EsD2A7AohJutgE4B0AZtqgK6wDEAIvgIIDCAKgJIBqrnfAG0ADAF1EoAA7ZYxHLkkgAHogCMAFgCcANnIBmAKxaATFtMaAHCZ1qANCACeiIyPIbD+k2pE791gHYdLQCAX1CHFAwFQmIyKhp6ZjYuPgFhNQkkEBk5LDwlVQRNSz0jU3MTKxt7J0RtAPdffzVDExNDES1DQ3DItHyCIhIKajpGFg4efkEhEyzpWXkC7KLNXQNjMwtrWwdnBA0NPS1m2wCLgKMTPpAowdiRhPGGADEAeXYAVQBlAH0ABJsJjcAByAHFRAscktBoVECF9ogroYDGoTAFWqUNJjLL0IncBjFhvExkkPt9-gAhd5MACaUKUuWWilWCICSIQtg05EMOhshksIjUeKOt3uxLio0SsHIeABYAAhkRcFAGGCAApfTh-KkcADSPw1HGE8yZsIU8OKOJ5V0xpyuIkM6J0nIuJnIlnRAS0pSFumO4qJeEepJlctwCuVmFV6tBWp1evYhuN7GE4nNeUtbOKImF5BFASO+n0WjUWisHLqCD5bjUXm6AS67X8OiD0RDJOl4wjUZVas12t1BqNJqEmUzLKtPkx5CLOhEGiqgudRc5nS05D8Zn0VxtOg0+nbDy7z3ovaV-YY7ABrAh+EBwLBkIz2WZcJzanRm-OPnMGhnSx9E5AD9ALH0AlKEwRCFXw1GPSUnjJWU8CpbAIEcOME2HZNRzTRk3wtFZQCKYwTg8LwLn0esfUMTk-EaTxTBMXcsVKBDOylM8UNwNCMKwockxTMcJ0IrNiJURATGsT1Tn5aD9CONRgnXL050sMsvUgkRoNsDihi45CIz4zCbzvcEHxpekCMWcTWRIlxPE9Uoi2g0Cvx6EC8QMfQF30XwNBEItIP00MKEwCAABswAYKY0kEXVaQZV9bKnHN+U5NQfXcTwRRgywCp0AI+VC08Iui2LUhmdNoXfbMHJrExOSA8g8zzMwiwrLojFKriYwAN0VSKIsq6Z0hsmE7KtNpOVOTcRFLctDCsHRLCucICVwdC4CUCVOJGScPwa2oDgAWlRcxzGCU5Dy0Ix-F6pCZUO+rJMOLROS8HkspCawnU8Tp8X6DsDKent5UvGMoBeiS1mUj1yl83cnTLO63UFVrSw6O7MVaIHCRBsLuOM9CDlSo63v8VEqgXH0l1plb6N3chpNMYU2m0IV8b20H4nKsAYfst6RWZoxNB0PwD08PFOW8OsIP8oUfX5YxHr53BBuGiBBenDTGgrZ0bGow8CvXHTyF9EJ7uuAU2w2oA */
   createMachine(
     {
       tsTypes: {} as import("./sectionEditor.machine.typegen").Typegen0,
@@ -26,7 +26,7 @@ export const sectionEditorMachine =
         context: {} as {
           id: string;
           level: 1 | 2 | 3 | 4 | 5 | 6;
-          heading: number;
+          heading: string;
           body: number;
         },
         events: {} as
@@ -38,7 +38,7 @@ export const sectionEditorMachine =
             }
           | {
               type: "CHANGE_HEADING";
-              length: number;
+              value: string;
             }
           | {
               type: "CHANGE_BODY";
@@ -72,6 +72,7 @@ export const sectionEditorMachine =
               on: {
                 INPUT_BACKSPACE: [
                   {
+                    target: "#sectionEditor.focus",
                     cond: "editorHasNoContent",
                     actions: "destroySelf",
                   },
@@ -151,7 +152,7 @@ export const sectionEditorMachine =
     {
       actions: {
         changeHeading: assign({
-          heading: (_context, event) => event.length,
+          heading: (_context, event) => event.value,
         }),
         changeBody: assign({
           body: (_context, event) => event.length,
@@ -167,10 +168,10 @@ export const sectionEditorMachine =
       },
       guards: {
         editorHasNoContent: (context) => {
-          return context.heading === 0 && context.body === 0;
+          return context.heading.length <= 0 && context.body === 0;
         },
         editorHeadingHasNoContent: (context) => {
-          return context.heading === 0;
+          return context.heading.length <= 0;
         },
         editorBodyHasNoContent: (context) => {
           return context.body === 0;

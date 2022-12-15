@@ -34,8 +34,6 @@ export const editorManagerMachine =
         context: {} as {
           editors: [string, SectionEditorActorRef][];
           currentEditorId: string | null;
-          // lastModifiedEditorId가 동기화 안되는중
-          lastModifiedEditorId: string | null;
         },
         events: {} as
           | {
@@ -111,7 +109,7 @@ export const editorManagerMachine =
               sectionEditorMachine.withContext({
                 id,
                 level: 1,
-                heading: 0,
+                heading: "",
                 body: 0,
               })
             ),
@@ -123,9 +121,19 @@ export const editorManagerMachine =
             context.editors.find(([id, ref]) => id === event.id) ?? [];
           ref?.stop?.();
 
+          const length = context.editors.length;
+          const destroyedIndex = context.editors.findIndex(
+            ([id, ref]) => id === event.id
+          );
+
           context.editors = context.editors.filter(([id]) => id !== event.id);
-          // TODO: destroy하고 currentEditorId 수정
-          context.currentEditorId = context.editors.at(-1)?.[0] ?? null;
+
+          if (destroyedIndex === length - 1) {
+            context.currentEditorId = context.editors.at(-1)?.[0] ?? null;
+          } else {
+            context.currentEditorId =
+              context.editors.at(destroyedIndex)?.[0] ?? null;
+          }
         }),
         activateEditor: assign((context, event) => {
           switch (event.type) {
@@ -135,6 +143,9 @@ export const editorManagerMachine =
               );
 
               context.currentEditorId = context.editors.at(index)?.[0] ?? null;
+              const ref = context.editors.at(index)?.[1];
+
+              ref?.send?.("ACTIVATE");
               break;
             }
             case "FOCUS_EDITOR": {
