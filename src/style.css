@@ -1,0 +1,22 @@
+[data-part="document-editor"] {
+  width: 100%;
+  min-height: 200px;
+  border: 1px solid;
+  display: flex;
+  flex-direction: column;
+}
+
+[data-part="section-editor-heading"] {
+  width: "100%";
+  outline: none;
+  border: none;
+}
+
+[data-level="1"] {
+  font-size: 24px;
+  font-weight: 900;
+}
+
+.ProseMirror-focused:focus-visible {
+  outline: none;
+}
