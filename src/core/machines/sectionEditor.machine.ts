@@ -6,8 +6,8 @@ import {
   type ActorRefFrom,
   type ContextFrom,
   type StateValueFrom,
+  StateFrom,
 } from "xstate";
-import { assign as immerAssign } from "@xstate/immer";
 
 export type SectionEditorActorRef = ActorRefFrom<typeof sectionEditorMachine>;
 
@@ -17,8 +17,10 @@ export type SectionEditorStateValue = StateValueFrom<
   typeof sectionEditorMachine
 >;
 
+export type SectionEditorState = StateFrom<typeof sectionEditorMachine>;
+
 export const sectionEditorMachine =
-  /** @xstate-layout N4IgpgJg5mDOIC5SzAYwC4EsD2A7AohJutgE4B0AZtqgK6wDEAIvgIIDCAKgJIBqrnfAG0ADAF1EoAA7ZYxHLkkgAHogCMAFgCcANnIBmAKxaATFtMaAHCZ1qANCACeiIyPIbD+k2pE791gHYdLQCAX1CHFAwFQmIyKhp6ZjYuPgFhNQkkEBk5LDwlVQRNSz0jU3MTKxt7J0RtAPdffzVDExNDES1DQ3DItHyCIhIKajpGFg4efkEhEyzpWXkC7KLNXQNjMwtrWwdnBA0NPS1m2wCLgKMTPpAowdiRhPGGADEAeXYAVQBlAH0ABJsJjcAByAHFRAscktBoVECF9ogroYDGoTAFWqUNJjLL0IncBjFhvExkkPt9-gAhd5MACaUKUuWWilWCICSIQtg05EMOhshksIjUeKOt3uxLio0SsHIeABYAAhkRcFAGGCAApfTh-KkcADSPw1HGE8yZsIU8OKOJ5V0xpyuIkM6J0nIuJnIlnRAS0pSFumO4qJeEepJlctwCuVmFV6tBWp1evYhuN7GE4nNeUtbOKImF5BFASO+n0WjUWisHLqCD5bjUXm6AS67X8OiD0RDJOl4wjUZVas12t1BqNJqEmUzLKtPkx5CLOhEGiqgudRc5nS05D8Zn0VxtOg0+nbDy7z3ovaV-YY7ABrAh+EBwLBkIz2WZcJzanRm-OPnMGhnSx9E5AD9ALH0AlKEwRCFXw1GPSUnjJWU8CpbAIEcOME2HZNRzTRk3wtFZQCKYwTg8LwLn0esfUMTk-EaTxTBMXcsVKBDOylM8UNwNCMKwockxTMcJ0IrNiJURATGsT1Tn5aD9CONRgnXL050sMsvUgkRoNsDihi45CIz4zCbzvcEHxpekCMWcTWRIlxPE9Uoi2g0Cvx6EC8QMfQF30XwNBEItIP00MKEwCAABswAYKY0kEXVaQZV9bKnHN+U5NQfXcTwRRgywCp0AI+VC08Iui2LUhmdNoXfbMHJrExOSA8g8zzMwiwrLojFKriYwAN0VSKIsq6Z0hsmE7KtNpOVOTcRFLctDCsHRLCucICVwdC4CUCVOJGScPwa2oDgAWlRcxzGCU5Dy0Ix-F6pCZUO+rJMOLROS8HkspCawnU8Tp8X6DsDKent5UvGMoBeiS1mUj1yl83cnTLO63UFVrSw6O7MVaIHCRBsLuOM9CDlSo63v8VEqgXH0l1plb6N3chpNMYU2m0IV8b20H4nKsAYfst6RWZoxNB0PwD08PFOW8OsIP8oUfX5YxHr53BBuGiBBenDTGgrZ0bGow8CvXHTyF9EJ7uuAU2w2oA */
+  /** @xstate-layout N4IgpgJg5mDOIC5SzAYwC4EsD2A7AohJutgE4B0AZtqgK6wDEAIvgIIDCAKgJIBqrnfAG0ADAF1EoAA7ZYxHLkkgAHogCMADjVryakQE41AZgCsAdn1GzGkwBoQAT0QAmM2fL6AbEeMmALEYaziIizgC+YfYoGAqExGRUNPTMbFx8AsJqEkggMnJYeEqqCJoiOnqGphZWNvZOCH7Ofh5qnq3ORn4iAVZ+EVFoBQREJBTUdIwAYgDy7ACqAMoA+gASbEzcAHIA4qLZ0rLyhTnFftrkZiYhJmodahZm3XWIbe5G+s76bmomJhoang0-RA0SGcVGiQmDBm82WACFpkwAJp7JR5I6KE6IM6eC5XEQ3O4PJ6ObEafTkZzONpXSw3PyePqREGDWIjBLjejkPArMAAQyIuCgDC2AAU5pwlnCOABpBaijjCcRow5DIrqUy4jpnf4iHyXESeZ4IG4mXSeRk0gG-NT6YGgtnxMZJWDc3C8gWYIUizbiyXS9hyhXsTL7XKqhTqko+M2WMxGHxtfR+OnGnUXYwiDQBJr6GxMgYxPDgjkut0ewXCsUSqWy+WKoTOMPotVY6MA8gpv4ad7tTx541GQGU4x6PxuUJmYwFllF4ZOyFcnn8ysMdgrVg7fCrdZbXbKnItyNttR+M-kIf9-V6zyuZyD+4ZnzOEzOH6-eP21nF9nOiZuuFsAgBwfT9WtA3rENUUPCNjlAYpDB0fsTE6AFAn8Kc0y8cgAX0G5DBMTwpzPIwvznEs-yXXBAOA0CawDIMGyyFV8mPeDEBML5yEZQ0UwJawRDcNNHyTYJLn7eNXzIsFf3ITAIAAGzABgOB4fhBClREUQPA5WLglREEvPFrlufUvhJep-nccwXz8LRvgtNRpMdCF5KUlS0nUpVm1gzF2IQKxcQNAlTPucy-GNCxyltfEgi8BkZwdH8Fy9AA3PkFPkjy1IyaDdIxKMjOCwkzMeCLSQQHtyBCEJAWCIdCMCZzkohWhcFgdA+QAI3crZuE4PLwz0vyDJKTjqusH5AVvNx9H0Y0Xw0aqOneK5NCnIwXwiZlcCAuAlCS+dRhYgq2wAWiNCqztjObLFPKxPkCd5mqO0sJhO1t-KHIxjJColwoW5wlo27QiMeQSzxeijF1dZdPSFD62NG+73DMK89D+LwzGpY02lxJMrnJTpBNPKHZM5WHqKA+p8s+0bPD+PFrABbR2jmtN410GL7j1bMvFcMmFwp8gAAtMA6sgaaG07-JxX6SrCsq0yBylqTONXfisH5BdcxSwER-TijfRpdDKbQUK6Ht7mVs1WlvM9OOpfxuh1hI0oy+SDZGo2qWcbi8J+DRBMsZNjW0ZoCTmsxxyDz4gk8V2KDajruqUr2o0aBbk1V7xvCB4IPk-bagA */
   createMachine(
     {
       tsTypes: {} as import("./sectionEditor.machine.typegen").Typegen0,
@@ -26,23 +28,23 @@ export const sectionEditorMachine =
         context: {} as {
           id: string;
           level: 1 | 2 | 3 | 4 | 5 | 6;
-          heading: string;
-          body: number;
+          headingElement: () => HTMLInputElement | null;
+          bodyElement: () => HTMLDivElement | null;
         },
         events: {} as
+          | {
+              type: "INIT";
+              headingElement: () => HTMLInputElement | null;
+              bodyElement: () => HTMLDivElement | null;
+            }
+          | {
+              type: "CHANGE_HEADING";
+            }
           | {
               type: "FOCUS_HEADING";
             }
           | {
               type: "FOCUS_BODY";
-            }
-          | {
-              type: "CHANGE_HEADING";
-              value: string;
-            }
-          | {
-              type: "CHANGE_BODY";
-              length: number;
             }
           | {
               type: "INPUT_BACKSPACE";
@@ -63,16 +65,16 @@ export const sectionEditorMachine =
       preserveActionOrder: true,
       predictableActionArguments: true,
       id: "sectionEditor",
-      initial: "focus",
+      initial: "unstable",
       states: {
         focus: {
           initial: "onHeading",
           states: {
             onHeading: {
+              entry: "focusHeading",
               on: {
                 INPUT_BACKSPACE: [
                   {
-                    target: "#sectionEditor.focus",
                     cond: "editorHasNoContent",
                     actions: "destroySelf",
                   },
@@ -82,12 +84,11 @@ export const sectionEditorMachine =
                   },
                   {},
                 ],
-                CHANGE_HEADING: {
-                  actions: "changeHeading",
-                },
+                CHANGE_HEADING: {},
               },
             },
             onBody: {
+              entry: "focusBody",
               on: {
                 INPUT_BACKSPACE: [
                   {
@@ -96,19 +97,15 @@ export const sectionEditorMachine =
                   },
                   {},
                 ],
-                CHANGE_BODY: {
-                  actions: "changeBody",
-                },
               },
+            },
+            history: {
+              history: "shallow",
+              type: "history",
             },
           },
           on: {
             DEACTIVATE: [
-              {
-                target: "idle",
-                cond: "editorHasNoContent",
-                actions: "destroySelf",
-              },
               {
                 target: "invalid",
                 cond: "editorHeadingHasNoContent",
@@ -119,11 +116,11 @@ export const sectionEditorMachine =
             ],
             FOCUS_HEADING: {
               target: ".onHeading",
-              actions: "focusEditor",
+              actions: "focusHeading",
             },
             FOCUS_BODY: {
               target: ".onBody",
-              actions: "focusEditor",
+              actions: "focusBody",
             },
           },
         },
@@ -131,11 +128,11 @@ export const sectionEditorMachine =
           on: {
             ACTIVATE_BODY: {
               target: "#sectionEditor.focus.onBody",
-              actions: "focusEditor",
+              actions: "focusBody",
             },
             ACTIVATE: {
-              target: "focus",
-              actions: "focusEditor",
+              target: "#sectionEditor.focus.history",
+              actions: "focusHeading",
             },
           },
         },
@@ -143,7 +140,15 @@ export const sectionEditorMachine =
           on: {
             ACTIVATE: {
               target: "focus",
-              actions: "focusEditor",
+              actions: "focusHeading",
+            },
+          },
+        },
+        unstable: {
+          on: {
+            INIT: {
+              target: "focus",
+              actions: ["assignHeadingElement", "assignBodyElement"],
             },
           },
         },
@@ -151,30 +156,35 @@ export const sectionEditorMachine =
     },
     {
       actions: {
-        changeHeading: assign({
-          heading: (_context, event) => event.value,
+        assignHeadingElement: assign({
+          headingElement: (_context, event) => event.headingElement,
         }),
-        changeBody: assign({
-          body: (_context, event) => event.length,
+        assignBodyElement: assign({
+          bodyElement: (_context, event) => event.bodyElement,
         }),
         destroySelf: sendParent((context) => ({
           type: "DESTROY_EDITOR",
           id: context.id,
         })),
-        focusEditor: sendParent((context) => ({
-          type: "FOCUS_EDITOR",
-          id: context.id,
-        })),
+        focusHeading: (context) => {
+          context.headingElement()!.focus();
+        },
+        focusBody: (context) => {
+          context.bodyElement()!.focus();
+        },
       },
       guards: {
         editorHasNoContent: (context) => {
-          return context.heading.length <= 0 && context.body === 0;
+          return (
+            context.headingElement()!.value.length === 0 &&
+            context.bodyElement()!.innerText.trim().length === 0
+          );
         },
         editorHeadingHasNoContent: (context) => {
-          return context.heading.length <= 0;
+          return context.headingElement()!.value.length === 0;
         },
         editorBodyHasNoContent: (context) => {
-          return context.body === 0;
+          return context.bodyElement()!.innerText.trim().length === 0;
         },
       },
     }

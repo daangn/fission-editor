@@ -1,5 +1,4 @@
 import * as React from "react";
-import { useActor } from "@xstate/react";
 import { Remirror, useRemirror } from "@remirror/react";
 import { htmlToProsemirrorNode } from "remirror";
 import { findChildren } from "@remirror/core-utils";
@@ -10,31 +9,29 @@ import {
   HardBreakExtension,
 } from "remirror/extensions";
 
-import { HeadingExtension } from "../core/remirror/headingExtension";
-import EditorInteractions from "./EditorInteractions";
-import { type EventHandler } from "../types/event";
-import { EditorManager } from "../context/EditorManager";
-import { pasteRules, type PasteRule } from "prosemirror-paste-rules";
-import { type Section } from "../hooks/useEditors";
+import { HeadingExtension } from "../../../core/remirror/headingExtension";
+import { EditorInteractions } from "./EditorInteractions";
+import { pasteRules } from "prosemirror-paste-rules";
+import { SectionEditorActorRef } from "../../../core/machines/sectionEditor.machine";
+import { useEditorManagerSender } from "../context/EditorManagerSender";
 
-export type SectionEditorProps = EventHandler & {
+export type SectionEditorProps = {
   id: string;
-  section: Section;
+  sectionRef: SectionEditorActorRef;
   className?: string;
 };
 
 const SectionEditor: React.FC<SectionEditorProps> = ({
   id,
-  section,
+  sectionRef,
   className,
 }) => {
-  const editorManagerRef = React.useContext(EditorManager);
-  const [_current, send] = useActor(editorManagerRef);
+  const sendParent = useEditorManagerSender();
   const [match, setMatch] = React.useState<RegExpMatchArray>();
 
   const emitter = (match: RegExpMatchArray) => {
     setMatch(match);
-    send("SPAWN_EDITOR");
+    sendParent("SPAWN_EDITOR");
   };
 
   const pasteEmitter = (match: RegExpMatchArray) => {};
@@ -67,16 +64,8 @@ const SectionEditor: React.FC<SectionEditorProps> = ({
 
   return (
     <div data-part="section-editor" className={className}>
-      <Remirror
-        key={id}
-        manager={manager}
-        autoRender="end"
-        state={state}
-        onChange={(parameter) => {
-          setState(parameter.state);
-        }}
-      >
-        <EditorInteractions section={section} match={match} />
+      <Remirror key={id} manager={manager} autoRender="end">
+        <EditorInteractions sectionRef={sectionRef} match={match} />
       </Remirror>
     </div>
   );

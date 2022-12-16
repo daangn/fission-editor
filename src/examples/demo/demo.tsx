@@ -1,52 +1,42 @@
 import * as React from "react";
 
-import DocumentEditor from "../../components/DocumentEditor";
-import SectionEditor from "../../components/SectionEditor";
-import SectionOutliner from "../../components/SectionOutliner";
-import SectionOutlinerItem from "../../components/SectionOutlinerItem";
-import { useEditors } from "../../hooks/useEditors";
-import { type EditorManagerContext } from "../../core/machines/editorManager.machine";
-import { useEditorDispatch } from "../../hooks/useEditorDispatch";
+import * as FissionEditor from "../..";
+import { SectionControl } from "../..";
 
 export default function Demo() {
-  const editors = useEditors();
-  const dispatch = useEditorDispatch();
+  return (
+    <FissionEditor.Provider>
+      <MySectionOutliner />
+      <FissionEditor.DocumentEditor className="my-editor" />
+    </FissionEditor.Provider>
+  );
+}
 
-  const onFocus = (editorId: string) => {
-    // console.log("focus", editorId);
-  };
+function MySectionOutliner() {
+  const { sections, activeSection } = FissionEditor.useFissionEditor();
 
-  const onBlur = (editorId: string) => {
-    // console.log("blur", editorId);
-  };
-
-  const onChange = (editors: EditorManagerContext["editors"]) => {
-    // console.log("onChange", editors);
-  };
+  console.log(sections);
 
   return (
-    <div>
-      <div>
-        <SectionOutliner>
-          {editors.map((section) => (
-            <SectionOutlinerItem key={section.id} section={section} />
-          ))}
-        </SectionOutliner>
-        <DocumentEditor onFocus={onFocus} onBlur={onBlur} onChange={onChange}>
-          {editors.map((section) => (
-            <SectionEditor key={section.id} id={section.id} section={section} />
-          ))}
-        </DocumentEditor>
-      </div>
-      <div>
-        <button
+    <ul>
+      {sections.map((section) => (
+        <li
+          key={section.id}
+          className={section === activeSection ? "active" : undefined}
           onClick={() => {
-            dispatch.create();
+            section.focusEditor({
+              scrollIntoView: true,
+            });
           }}
         >
-          create
-        </button>
-      </div>
-    </div>
+          <MySectionItem section={section} />
+        </li>
+      ))}
+    </ul>
   );
+}
+
+function MySectionItem({ section }: { section: SectionControl }) {
+  const { heading } = FissionEditor.useSection(section);
+  return <span>{heading}</span>;
 }

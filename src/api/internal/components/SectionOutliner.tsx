@@ -1,8 +1,6 @@
 import * as React from "react";
 
-import { type EventHandler } from "../types/event";
-
-export type SectionOutlinerProps = EventHandler & {
+export type SectionOutlinerProps = {
   className?: string;
   children: React.ReactNode;
 };
