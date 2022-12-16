@@ -4,12 +4,12 @@ import DocumentEditor from "../../components/DocumentEditor";
 import SectionEditor from "../../components/SectionEditor";
 import SectionOutliner from "../../components/SectionOutliner";
 import SectionOutlinerItem from "../../components/SectionOutlinerItem";
-import { useEditor } from "../../hooks/useEditor";
+import { useEditors } from "../../hooks/useEditors";
 import { type EditorManagerContext } from "../../core/machines/editorManager.machine";
 import { useEditorDispatch } from "../../hooks/useEditorDispatch";
 
 export default function Demo() {
-  const editors = useEditor();
+  const editors = useEditors();
   const dispatch = useEditorDispatch();
 
   const onFocus = (editorId: string) => {
@@ -28,13 +28,13 @@ export default function Demo() {
     <div>
       <div>
         <SectionOutliner>
-          {editors.map(({ id, sectionEditorRef }) => (
-            <SectionOutlinerItem key={id} sectionRef={sectionEditorRef} />
+          {editors.map((section) => (
+            <SectionOutlinerItem key={section.id} section={section} />
           ))}
         </SectionOutliner>
         <DocumentEditor onFocus={onFocus} onBlur={onBlur} onChange={onChange}>
-          {editors.map(({ id, sectionEditorRef }) => (
-            <SectionEditor key={id} id={id} sectionRef={sectionEditorRef} />
+          {editors.map((section) => (
+            <SectionEditor key={section.id} id={section.id} section={section} />
           ))}
         </DocumentEditor>
       </div>

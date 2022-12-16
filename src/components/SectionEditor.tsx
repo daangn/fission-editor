@@ -2,6 +2,7 @@ import * as React from "react";
 import { useActor } from "@xstate/react";
 import { Remirror, useRemirror } from "@remirror/react";
 import { htmlToProsemirrorNode } from "remirror";
+import { findChildren } from "@remirror/core-utils";
 import {
   BoldExtension,
   BulletListExtension,
@@ -10,21 +11,21 @@ import {
 } from "remirror/extensions";
 
 import { HeadingExtension } from "../core/remirror/headingExtension";
-import { type SectionEditorActorRef } from "../core/machines/sectionEditor.machine";
 import EditorInteractions from "./EditorInteractions";
 import { type EventHandler } from "../types/event";
 import { EditorManager } from "../context/EditorManager";
-import { CustomKeymapExtension } from "../core/remirror/customKeymapExtension";
+import { pasteRules, type PasteRule } from "prosemirror-paste-rules";
+import { type Section } from "../hooks/useEditors";
 
 export type SectionEditorProps = EventHandler & {
   id: string;
-  sectionRef: SectionEditorActorRef;
+  section: Section;
   className?: string;
 };
 
 const SectionEditor: React.FC<SectionEditorProps> = ({
   id,
-  sectionRef,
+  section,
   className,
 }) => {
   const editorManagerRef = React.useContext(EditorManager);
@@ -35,16 +36,33 @@ const SectionEditor: React.FC<SectionEditorProps> = ({
     setMatch(match);
     send("SPAWN_EDITOR");
   };
+
+  const pasteEmitter = (match: RegExpMatchArray) => {};
+
   const { manager, state, setState } = useRemirror({
     extensions: () => [
-      new HeadingExtension(emitter),
-      new CustomKeymapExtension(),
+      new HeadingExtension(emitter, pasteEmitter),
       new BulletListExtension(),
       new OrderedListExtension(),
       new HardBreakExtension(),
       new BoldExtension(),
     ],
+    plugins: [pasteRules([])],
     stringHandler: htmlToProsemirrorNode,
+  });
+
+  const headings = findChildren({
+    node: state.doc,
+    predicate: (child) =>
+      child.node.isBlock && child.node.type.name === "heading",
+  });
+
+  for (let i = 1; i < headings.length; i++) {
+    state.doc.slice(headings[i - 1].pos, headings[i].pos);
+  }
+
+  const slices = headings.map((heading) => {
+    return state.doc.slice(heading.pos);
   });
 
   return (
@@ -58,7 +76,7 @@ const SectionEditor: React.FC<SectionEditorProps> = ({
           setState(parameter.state);
         }}
       >
-        <EditorInteractions sectionRef={sectionRef} match={match} />
+        <EditorInteractions section={section} match={match} />
       </Remirror>
     </div>
   );

@@ -873,6 +873,18 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@remirror/core-types@npm:^2.0.2":
+  version: 2.0.2
+  resolution: "@remirror/core-types@npm:2.0.2"
+  dependencies:
+    "@remirror/core-constants": ^2.0.0
+    "@remirror/types": ^1.0.0
+  peerDependencies:
+    "@remirror/pm": ^2.0.2
+  checksum: 4edc3afc567e80c3505226c0be351b80ce0802f71bea2fcbcc17a232b62aa679593582b21f35cb04784c1bea370614c7dd776e7fc02b1a063444a29952817c82
+  languageName: node
+  linkType: hard
+
 "@remirror/core-utils@npm:^2.0.7":
   version: 2.0.7
   resolution: "@remirror/core-utils@npm:2.0.7"
@@ -894,6 +906,30 @@ __metadata:
     "@types/node":
       optional: true
   checksum: 9537c85ae064a42a99af929cb9f6c721d1ac0da4b8fbea475407ab9d4a431ab015c693ceb98ca804a7c13a7f2ff6c10d85f3719039f652769b04494015dec916
+  languageName: node
+  linkType: hard
+
+"@remirror/core-utils@npm:^2.0.9":
+  version: 2.0.9
+  resolution: "@remirror/core-utils@npm:2.0.9"
+  dependencies:
+    "@babel/runtime": ^7.13.10
+    "@remirror/core-constants": ^2.0.0
+    "@remirror/core-helpers": ^2.0.0
+    "@remirror/core-types": ^2.0.2
+    "@remirror/messages": ^2.0.1
+    "@types/min-document": ^2.19.0
+    css-in-js-utils: ^3.1.0
+    get-dom-document: ^0.1.3
+    min-document: ^2.19.0
+    parenthesis: ^3.1.8
+  peerDependencies:
+    "@remirror/pm": ^2.0.2
+    "@types/node": "*"
+  peerDependenciesMeta:
+    "@types/node":
+      optional: true
+  checksum: 1e2654f8adc98c7f19882ea872686df146d2fc459fac6cea53b9b28c81f815c3420d519731d7dea6bf914b09c8bdc123df274c1fb193a13a0cb16b885279c829
   languageName: node
   linkType: hard
 
@@ -3765,6 +3801,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "fission-editor@workspace:."
   dependencies:
+    "@remirror/core-utils": ^2.0.9
     "@remirror/pm": ^2.0.1
     "@remirror/react": ^2.0.18
     "@types/node": ^18.11.9
@@ -3777,6 +3814,7 @@ __metadata:
     "@xstate/react": ^3.0.1
     immer: ^9.0.16
     nanobundle: ^0.0.28
+    prosemirror-paste-rules: ^2.0.2
     react: ^18.2.0
     react-dom: ^18.2.0
     remirror: ^2.0.17
@@ -5392,6 +5430,22 @@ __metadata:
     prosemirror-state: ^1
     prosemirror-view: ^1
   checksum: 65c9efe73866542c81a51e7faeb8edb846dc7ec9f95519280914110f5a599b40f0b74623cd93e9be9eedb21292f088e48a397eadaa2b6606ba2927b46b6fb257
+  languageName: node
+  linkType: hard
+
+"prosemirror-paste-rules@npm:^2.0.2":
+  version: 2.0.2
+  resolution: "prosemirror-paste-rules@npm:2.0.2"
+  dependencies:
+    "@babel/runtime": ^7.13.10
+    "@remirror/core-constants": ^2.0.0
+    "@remirror/core-helpers": ^2.0.0
+    escape-string-regexp: ^4.0.0
+  peerDependencies:
+    prosemirror-model: ^1
+    prosemirror-state: ^1
+    prosemirror-view: ^1
+  checksum: 8843aa1af71caa43ac84cceaccd2c13184bb9095a4bee6863d8a1a993df4d3056e6e6a1feeaac33eef38b8211f44deb237f27eabec3bc3f684776ff408128d0f
   languageName: node
   linkType: hard
 

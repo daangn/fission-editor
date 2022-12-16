@@ -1,17 +1,15 @@
 import { useActor } from "@xstate/react";
 
-import { type SectionEditorActorRef } from "../core/machines/sectionEditor.machine";
+import { type Section } from "../hooks/useEditors";
 import { type EventHandler } from "../types/event";
 
 export type SectionOutlinerProps = EventHandler & {
-  sectionRef: SectionEditorActorRef;
+  section: Section;
 };
-const SectionOutlinerItem: React.FC<SectionOutlinerProps> = ({
-  sectionRef,
-}) => {
-  const [current] = useActor(sectionRef);
+const SectionOutlinerItem: React.FC<SectionOutlinerProps> = ({ section }) => {
+  const sectionContext = section.getData();
 
-  return <div data-part="section-outliner-item">{current.context.heading}</div>;
+  return <div data-part="section-outliner-item">{sectionContext.heading}</div>;
 };
 
 export default SectionOutlinerItem;

@@ -1,71 +1,66 @@
 import * as React from "react";
 import { useActor } from "@xstate/react";
 import {
+  useEditorDomRef,
   useEditorEvent,
   useEditorFocus,
   useEditorState,
 } from "@remirror/react";
 
 import { EditorManager } from "../context/EditorManager";
-import { type SectionEditorActorRef } from "../core/machines/sectionEditor.machine";
+import { type Section } from "../hooks/useEditors";
+import { useSectionDispatch } from "../hooks/useSectionDispatch";
 
 type EditorInteractionsProps = {
-  sectionRef: SectionEditorActorRef;
+  section: Section;
   match?: RegExpMatchArray;
 };
 const EditorInteractions: React.FC<EditorInteractionsProps> = ({
-  sectionRef,
+  section,
   match,
 }) => {
   const headingRef = React.useRef<HTMLInputElement>(null);
   const editorState = useEditorState();
   const editorManagerRef = React.useContext(EditorManager);
   const [editorCurrent, sendParent] = useActor(editorManagerRef);
+  const dispatch = useSectionDispatch(section.id);
 
-  const [current, send] = useActor(sectionRef);
-
-  const [_isFocused, focus] = useEditorFocus();
+  const ref = useEditorDomRef();
 
   const handleKeyDown = React.useCallback<React.KeyboardEventHandler>((e) => {
     if (e.code === "Backspace") {
-      send("INPUT_BACKSPACE");
+      dispatch.inputBackspace();
     }
     if (e.code === "Enter") {
-      send("FOCUS_BODY");
+      dispatch.focusBody();
     }
   }, []);
 
   const handleFocusBody = React.useCallback(() => {
-    send("ACTIVATE");
-    send("FOCUS_BODY");
+    dispatch.activate();
+    dispatch.focusBody();
   }, []);
 
   React.useEffect(() => {
-    send({
-      type: "CHANGE_BODY",
-      length: editorState.doc.content.size - 2,
-    });
+    dispatch.changeBody(editorState.doc.content.size - 2);
   }, [editorState]);
 
   React.useEffect(() => {
-    const focusOnHeading = current.matches("focus.onHeading");
+    const focusOnHeading = section.matches("focus.onHeading");
     if (focusOnHeading) {
       headingRef.current!.focus();
     }
-    const focusOnBody = current.matches("focus.onBody");
+    const focusOnBody = section.matches("focus.onBody");
     if (focusOnBody && !match) {
       focus();
     }
-  }, [current, send]);
+  }, [section, dispatch]);
 
   React.useEffect(() => {
-    if (
-      editorCurrent.event.type === "DESTROY_EDITOR" ||
-      current.event.type === "ACTIVATE_BODY"
-    ) {
+    if (editorCurrent.event.type === "DESTROY_EDITOR") {
       focus();
     }
-  }, [editorCurrent.event.type]);
+  }, [editorCurrent]);
 
   useEditorEvent("keydown", handleKeyDown as any);
   useEditorEvent("focus", handleFocusBody);
@@ -74,18 +69,15 @@ const EditorInteractions: React.FC<EditorInteractionsProps> = ({
     <input
       type="input"
       ref={headingRef}
-      data-level={current.context.level}
+      data-level={section.getData().level}
       data-part="section-editor-heading"
       onChange={(e) => {
-        send({
-          type: "CHANGE_HEADING",
-          value: e.currentTarget.value,
-        });
+        dispatch.changeHeading(e.currentTarget.value);
       }}
       onKeyDown={handleKeyDown}
       onFocus={() => {
-        send("ACTIVATE");
-        send("FOCUS_HEADING");
+        dispatch.activate();
+        dispatch.focusHeading();
       }}
     />
   );

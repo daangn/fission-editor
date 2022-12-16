@@ -74,10 +74,15 @@ export interface HeadingOptions {}
 // @ts-ignore
 export class HeadingExtension extends NodeExtension<HeadingOptions> {
   inputEmitter: (match: RegExpMatchArray) => void;
+  pasteEmitter: (match: RegExpMatchArray) => void;
 
-  constructor(emitter: (match: RegExpMatchArray) => void) {
+  constructor(
+    emitter: (match: RegExpMatchArray) => void,
+    pasteEmitter: (match: RegExpMatchArray) => void
+  ) {
     super();
     this.inputEmitter = emitter;
+    this.pasteEmitter = pasteEmitter;
   }
 
   get name() {
@@ -107,7 +112,16 @@ export class HeadingExtension extends NodeExtension<HeadingOptions> {
           default: this.options.defaultLevel,
         },
       },
-      parseDOM: [...(override.parseDOM ?? [])],
+      parseDOM: [
+        ...this.options.levels.map((level) => ({
+          tag: `h${level}`,
+          getAttrs: (element: string | Node) => ({
+            ...extra.parse(element),
+            level,
+          }),
+        })),
+        ...(override.parseDOM ?? []),
+      ],
       toDOM: (node: ProsemirrorNode) => {
         return [
           "div",
@@ -128,7 +142,7 @@ export class HeadingExtension extends NodeExtension<HeadingOptions> {
   // toggleHeading(attrs: HeadingExtensionAttributes = {}): CommandFunction {
   //   return toggleBlockItem({
   //     type: this.type,
-  //     toggleType: 'paragraph',
+  //     toggleType: "paragraph",
   //     attrs,
   //   });
   // }
@@ -178,7 +192,9 @@ export class HeadingExtension extends NodeExtension<HeadingOptions> {
       nodeType: this.type,
       regexp: new RegExp(`^#{${level}}\\s([\\s\\w]+)$`),
       getAttributes: () => ({ level }),
-      startOfTextBlock: true,
+      getContent: (match) => {
+        this.pasteEmitter(match);
+      },
     }));
   }
 }
